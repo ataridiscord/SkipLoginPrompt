@@ -20,9 +20,10 @@ int main()
     {
         std::printf("Failed to set key.\n");
         RegCloseKey(key);
-        std::cin.get();
     }
     std::printf("Process completed successfully.\n");
     RegCloseKey(key);
+    
     std::cin.get();
+    return EXIT_SUCCESS;
 }
