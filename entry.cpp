@@ -2,28 +2,31 @@
 #include <Windows.h>
 #include <thread>
 
+using namespace std;
+
 int main()
 {
-    HKEY key{};
-    const std::uint8_t admin_logon{ 1 };
+    SetConsoleTitleA("Auto Login");
 
-    std::printf("This program will allow you to skip Windows login at startup.\nWould you like to continue?\nY/N: ");
-    if (std::cin.get() != 'y')
+    HKEY key{};
+    const uint8_t admin_logon{ 1 };
+
+    cout << "This program will allow you to skip Windows login at startup.\nContinue? (Y/N): ";
+    if (cin.get() != 'y')
         return EXIT_FAILURE;
 
-    for (int i = 5; i > 0; i--, std::this_thread::sleep_for(std::chrono::seconds(1)))
-        std::printf("Process is starting in %d seconds...\n", i);
+    for (int i = 5; i > 0; i--, this_thread::sleep_for(chrono::seconds(1)))
+        cout << "Process is starting in " << i << " seconds...\n";
 
     system("cls");
 
     if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", 0, KEY_SET_VALUE, &key) != ERROR_SUCCESS || RegSetValueExA(key, "ForceUnlockLogon", false, REG_DWORD, &admin_logon, 1) != ERROR_SUCCESS)
-    {
-        std::printf("Failed to set key.\n");
-        RegCloseKey(key);
-    }
-    std::printf("Process completed successfully.\n");
+        cout << "Failed to set key.";
+    else
+        cout << "Process completed successfully";
+
     RegCloseKey(key);
-    
-    std::cin.get();
-    return EXIT_SUCCESS;
+
+    cin.get();
+	return EXIT_SUCCESS;
 }
